@@ -1,19 +1,7 @@
 import styled from 'styled-components';
 import { Button } from './Button.styles';
 
-export const EnterCodeHeader = styled.h2`
-    color: white;
-    font-size: 20px;
-    margin: 10px;
-`
-
 export const EnterCodeContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
-
-export const EnterCodeFieldContainer = styled.div`
     display: flex;
     flex-direction: row;
     gap: 10px;

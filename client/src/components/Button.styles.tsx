@@ -18,6 +18,10 @@ export const Button = styled.button`
     }
 `
 
-export const IconButton = styled(Button)`
+export const IconContainer = styled.img`
+    width: 30px;
+`
 
+export const IconButton = styled(Button)`
+    gap: 5px;
 `

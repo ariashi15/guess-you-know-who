@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PageLayout } from "./components/PageLayout";
 import { SetupGamePage } from "./components/SetupGamePage";
-// import { CreateGameOptions } from "./pages/CreateGameOptions";
+import { WaitingRoom } from "./components/WaitingRoom";
+import { CreateGameOptions } from "./components/CreateGameOptions";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<PageLayout />}>
-          <Route index element={<SetupGamePage />}>
-            {/* <Route index element={<CreateGameOptions />}/> */}
-            {/* <Route path="waitingroom" element=<WaitingRoom />}> */}
+        <Routes>
+          <Route path="/" element={<PageLayout />}>
+            <Route path="/" element={<SetupGamePage />}>
+              <Route index element={<CreateGameOptions />}/>
+              <Route path="waiting-room" element={<WaitingRoom />}/>
           </Route>
-          {/* Add more routes here as you create pages */}
         </Route>
       </Routes>
     </BrowserRouter>

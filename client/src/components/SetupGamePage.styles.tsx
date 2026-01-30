@@ -9,8 +9,9 @@ export const LeftColContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-left: 37px;
+    gap: 70px;
 `
 
 export const InstructionBox = styled.div`
@@ -24,4 +25,5 @@ export const InstructionBox = styled.div`
 export const InstructionsHeader = styled.h2`
     margin: 0;
     color: var(--red);
+    font-size: 20px;
 `

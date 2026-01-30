@@ -1,5 +1,5 @@
 import { TwoColContainer, InstructionBox, InstructionsHeader } from "./SetupGamePage.styles";
-import { CreateGameOptions } from "./CreateGameOptions";
+import { Outlet } from "react-router-dom";
 
 function Instructions() {
     const steps = [
@@ -24,7 +24,7 @@ export function SetupGamePage() {
     return (
         <TwoColContainer>
             <Instructions />
-            <CreateGameOptions />
+            <Outlet />
         </TwoColContainer>
     );
 }
