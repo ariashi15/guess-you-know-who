@@ -7,9 +7,10 @@ export const TwoColContainer = styled.div`
 `
 export const LeftColContainer = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    margin-left: 45px;
+    justify-content: space-evenly;
+    margin-left: 37px;
 `
 
 export const InstructionBox = styled.div`
