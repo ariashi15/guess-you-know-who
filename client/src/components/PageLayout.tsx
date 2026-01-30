@@ -6,7 +6,7 @@ export function PageLayout() {
     return (
         <div>
             <LogoWrapper>
-                <Logo src="/logo.png" alt="Logo" />
+                <Logo src="/images/logo.png" alt="Logo" />
             </LogoWrapper>
             <Board>
                 <Outlet />

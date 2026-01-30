@@ -5,7 +5,7 @@ export const Button = styled.button`
     align-items: center;
     justify-content: center;
     background-color: var(--red);
-    color: var(--white);
+    color: white;
     border: none;
     border-radius: 10px;
     width: 250px;

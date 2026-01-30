@@ -9,7 +9,7 @@ export const GameCode = styled.div`
     color: var(--blue);
     width: 250px;
     height: 80px;
-    background: var(--white);
+    background: white;
     border-radius: 10px;
 `
 

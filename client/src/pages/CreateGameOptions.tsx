@@ -15,7 +15,7 @@ export function CreateGameOptions() {
                 <EnterCodeContainer>
                     <EnterCodeField type='text' placeholder='Game Code'></EnterCodeField>
                     <EnterButton onClick={() => navigate('/waiting-room')}>
-                        <IconContainer src='enter.png' />
+                        <IconContainer src='/images/enter.png' />
                     </EnterButton>
                 </EnterCodeContainer>
             </LabelContentContainer>

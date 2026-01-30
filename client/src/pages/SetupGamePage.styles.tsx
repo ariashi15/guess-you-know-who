@@ -15,7 +15,7 @@ export const LeftColContainer = styled.div`
 `
 
 export const InstructionBox = styled.div`
-    background: var(--white);
+    background: white;
     width: 370px;
     height: 585px;
     border-radius: 10px;

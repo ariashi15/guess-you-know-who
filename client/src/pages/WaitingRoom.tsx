@@ -7,13 +7,13 @@ function Players() {
     return (
         <PlayersContainer>
             <PlayerContainer style={{ 'color': 'var(--red)'}}>
-                <img src='user-red.png'/>
+                <img src='/images/user-red.png'/>
                 <PlayerLabel>You</PlayerLabel>
                 <PlayerStatus>Connected</PlayerStatus>
                 <PlayerStatus>Friends Uploaded</PlayerStatus>
             </PlayerContainer>
             <PlayerContainer style={{ 'color': 'var(--yellow)'}}>
-                <img src='user-yellow.png'/>
+                <img src='/images/user-yellow.png'/>
                 <PlayerLabel>Opponent</PlayerLabel>
                 <PlayerStatus>Connected</PlayerStatus>
                 <PlayerStatus>Friends Not Uploaded</PlayerStatus>
@@ -30,7 +30,7 @@ export function WaitingRoom() {
                 <GameCode>ABCDEF</GameCode>
             </LabelContentContainer>
             <IconButton>
-                <IconContainer src="upload.png"></IconContainer>
+                <IconContainer src="/images/upload.png"></IconContainer>
                 Upload Friends
             </IconButton>
             <Players></Players>

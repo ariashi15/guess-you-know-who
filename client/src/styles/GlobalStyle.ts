@@ -15,14 +15,21 @@ export const GlobalStyle = createGlobalStyle`
         font-style: normal;
     }
 
+    @font-face {
+        font-family: 'Roboto-Bold';
+        src: url('fonts/roboto/Roboto-Medium.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
     :root {
         --background: #8EBAE1;
         --red: #D0202D;
         --blue: #035094;
-        --yellow: #FFEA00;
-        --white: #FFFFFF;
+        --yellow: #ebd800;
         --font-header: 'Melon Pop';
         --font-body: 'Roboto';
+        --font-body-bold: 'Roboto-Bold';
     }
 
     *, *::before, *::after {
