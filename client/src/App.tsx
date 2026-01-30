@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PageLayout } from "./components/PageLayout";
-import { SetupGamePage } from "./components/SetupGamePage";
-import { WaitingRoom } from "./components/WaitingRoom";
-import { CreateGameOptions } from "./components/CreateGameOptions";
+import { SetupGamePage } from "./pages/SetupGamePage";
+import { WaitingRoom } from "./pages/WaitingRoom";
+import { CreateGameOptions } from "./pages/CreateGameOptions";
 
 function App() {
   return (

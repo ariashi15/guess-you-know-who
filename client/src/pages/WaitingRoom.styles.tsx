@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Label } from './Label.styles';
+import { Label } from '../components/Label.styles';
 
 export const GameCode = styled.div`
     display: flex;

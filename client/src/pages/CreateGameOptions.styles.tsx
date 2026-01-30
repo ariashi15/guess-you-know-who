@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from './Button.styles';
+import { Button } from '../components/Button.styles';
 
 export const EnterCodeContainer = styled.div`
     display: flex;

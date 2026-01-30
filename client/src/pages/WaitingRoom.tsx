@@ -1,7 +1,7 @@
 import { LeftColContainer } from "./SetupGamePage.styles";
-import { Label, LabelContentContainer } from "./Label.styles";
+import { Label, LabelContentContainer } from "../components/Label.styles";
 import { GameCode, PlayerContainer, PlayerLabel, PlayersContainer, PlayerStatus } from "./WaitingRoom.styles";
-import { IconButton, IconContainer } from "./Button.styles";
+import { IconButton, IconContainer } from "../components/Button.styles";
 
 function Players() {
     return (

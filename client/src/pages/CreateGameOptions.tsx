@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Button, IconContainer } from './Button.styles'
+import { Button, IconContainer } from '../components/Button.styles'
 import { LeftColContainer } from './SetupGamePage.styles';
-import { Label, LabelContentContainer } from './Label.styles';
+import { Label, LabelContentContainer } from '../components/Label.styles';
 import { EnterCodeField, EnterButton, EnterCodeContainer } from './CreateGameOptions.styles';
 
 export function CreateGameOptions() {
