@@ -1,7 +1,7 @@
+import { Instructions } from "../components/Instructions";
+
 export function Home() {
     return (
-        <div>
-            Home
-        </div>
+        <Instructions />
     );
 }
