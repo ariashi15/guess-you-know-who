@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Button } from './Button.styles';
 
-export const EnterCodeHeader = styled.div`
+export const EnterCodeHeader = styled.h2`
     color: white;
     font-size: 20px;
     margin: 10px;
