@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import * as B from "./Board.styles";
+import { BoardBackground } from "./Board.styles";
 
 // allow board to wrap other components
 type BoardProps = {
@@ -8,8 +8,8 @@ type BoardProps = {
 
 export function Board({ children }: BoardProps) {
     return (
-        <B.BoardBackground>
+        <BoardBackground>
             {children}
-        </B.BoardBackground>
+        </BoardBackground>
     );
 }

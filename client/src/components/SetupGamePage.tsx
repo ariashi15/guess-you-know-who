@@ -1,6 +1,7 @@
-import { InstructionBox, InstructionsHeader } from "./Instructions.styles";
+import { TwoColContainer, InstructionBox, InstructionsHeader } from "./SetupGamePage.styles";
+import { CreateGameOptions } from "./CreateGameOptions";
 
-export function Instructions() {
+function Instructions() {
     const steps = [
         'Step 1', 
         'Step 2', 
@@ -16,5 +17,14 @@ export function Instructions() {
                 ))}
             </ol>
         </InstructionBox>
+    );
+}
+
+export function SetupGamePage() {
+    return (
+        <TwoColContainer>
+            <Instructions />
+            <CreateGameOptions />
+        </TwoColContainer>
     );
 }
