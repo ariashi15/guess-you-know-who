@@ -47,6 +47,15 @@ router.post("/game/:gameCode/join", (req, res) => {
     return res.status(404).json({ error: "Game not found" });
   }
 
+  // Rejoin: return existing slot if this client already joined
+  if (session.player1Id === playerId) {
+    return res.status(200).json({ assignedPlayerId: "player1" });
+  }
+
+  if (session.player2Id === playerId) {
+    return res.status(200).json({ assignedPlayerId: "player2" });
+  }
+
   // Check if game is full
   if (session.player1Id && session.player2Id) {
     return res.status(400).json({ error: "Game is full" });
@@ -66,10 +75,10 @@ router.post("/game/:gameCode/join", (req, res) => {
 
   updateSession(gameCode, session);
 
-  return res.status(200).json({ playerId: assignedPlayerId });
+  return res.status(200).json({ assignedPlayerId });
 });
 
-// Get game status
+// get game status
 router.get("/game/:gameCode/status", (req, res) => {
   const { gameCode } = req.params;
   const session = getSession(gameCode);
@@ -80,6 +89,10 @@ router.get("/game/:gameCode/status", (req, res) => {
 
   return res.json({
     isFull: !!session.player1Id && !!session.player2Id,
+    player1Connected: !!session.player1Id,
+    player2Connected: !!session.player2Id,
+    player1Uploaded: !!session.player1Profiles,
+    player2Uploaded: !!session.player2Profiles,
     mutuals: session.mutuals || [],
     mutualsCount: session.mutuals?.length || 0,
   });
