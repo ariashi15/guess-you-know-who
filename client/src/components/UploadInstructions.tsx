@@ -1,7 +1,6 @@
-import { TwoColContainer, InstructionBox, InstructionsHeader } from "./SetupGamePage.styles";
-import { Outlet } from "react-router-dom";
+import { InstructionBox, InstructionsHeader } from "./SetupGamePage.styles";
 
-function Instructions() {
+export function UploadInstructions() {
     const steps = [ 
         'Create a game or join a game via code.',
         `Go to Instagram Web > Settings > See more in Accounts Center > Your information and permissions > 
@@ -21,14 +20,5 @@ function Instructions() {
                 ))}
             </ol>
         </InstructionBox>
-    );
-}
-
-export function SetupGamePage() {
-    return (
-        <TwoColContainer>
-            <Instructions />
-            <Outlet />
-        </TwoColContainer>
     );
 }

@@ -1,8 +1,10 @@
 import { useRef } from 'react';
-import { LeftColContainer } from "./SetupGamePage.styles";
+import { useParams } from 'react-router-dom';
+import { LeftColContainer, TwoColContainer } from "../components/SetupGamePage.styles";
 import { Label, LabelContentContainer } from "../components/Label.styles";
 import { GameCode, PlayerContainer, PlayerLabel, PlayersContainer, PlayerStatus } from "./WaitingRoom.styles";
 import { IconButton, IconContainer } from "../components/Button.styles";
+import { UploadInstructions } from '../components/UploadInstructions';
 
 function Players() {
     return (
@@ -46,6 +48,8 @@ async function uploadFile(file: File) {
 export function WaitingRoom() {
     // reference to hidden file input element
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { gameCode } = useParams<{ gameCode: string }>();
+    
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -67,26 +71,29 @@ export function WaitingRoom() {
     };
 
     return (
-        <LeftColContainer>
-            <LabelContentContainer>
-                <Label>Game Code</Label>
-                <GameCode>ABCDEF</GameCode>
-            </LabelContentContainer>
+        <TwoColContainer>
+            <UploadInstructions />
+            <LeftColContainer>
+                <LabelContentContainer>
+                    <Label>Game Code</Label>
+                    <GameCode>{gameCode}</GameCode>
+                </LabelContentContainer>
 
-            {/* hidden file input trigger */}
-            <input 
-                ref={fileInputRef}
-                type="file"
-                accept=".json"
-                onChange={handleUpload}
-                style={{ display: 'none'}}
-            />
+                {/* hidden file input trigger */}
+                <input 
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json"
+                    onChange={handleUpload}
+                    style={{ display: 'none'}}
+                />
 
-            <IconButton onClick={triggerFileInput}>
-                <IconContainer src="/images/upload.png"></IconContainer>
-                Upload Friends
-            </IconButton>
-            <Players></Players>
-        </LeftColContainer>
+                <IconButton onClick={triggerFileInput}>
+                    <IconContainer src="/images/upload.png"></IconContainer>
+                    Upload Friends
+                </IconButton>
+                <Players />
+            </LeftColContainer>
+        </TwoColContainer>
     );
 }
