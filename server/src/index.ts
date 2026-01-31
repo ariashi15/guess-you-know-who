@@ -86,6 +86,6 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
     return res.status(200).json({
       message: "File uploaded successfully",
-      profileCount: profile_links.length
+      profile_links: profile_links
     })
 })
