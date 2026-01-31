@@ -3,7 +3,7 @@ import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
 import multer from "multer";
-import { extractProfileLinks } from "./parser.js";
+import { extractProfileLinks } from "./parser";
 
 const app = express();
 app.use(cors());
@@ -22,6 +22,10 @@ server.listen(3001, () => {
 // temporary storage for json files
 const upload = multer({ storage: multer.memoryStorage() });
 
+app.get("/", (req, res) => {
+  res.send("Game server is running");
+});
+
 // frontend will send files to this endpoint
 app.post("/upload", upload.single("file"), (req, res) => {
     if (!req.file) return res.status(400).send('No file uploaded');
@@ -35,4 +39,9 @@ app.post("/upload", upload.single("file"), (req, res) => {
     }
     
     const profile_links = extractProfileLinks(json);
+
+    return res.status(200).json({
+      message: "File uploaded successfully",
+      profileCount: profile_links.length
+    })
 })
