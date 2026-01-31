@@ -1,0 +1,135 @@
+import express from "express";
+import multer from "multer";
+import { extractProfileLinks } from "./parser";
+import { getSession, createSession, updateSession, calculateMutuals } from "./storage";
+
+const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Health check
+router.get("/", (req, res) => {
+  res.send("Game server is running");
+});
+
+// Check if game exists
+router.get("/game/:gameCode/exists", (req, res) => {
+  const { gameCode } = req.params;
+  const session = getSession(gameCode);
+  return res.json({ exists: !!session });
+});
+
+// Create a new game session
+router.post("/game/create", (req, res) => {
+  const { gameCode } = req.body;
+  
+  if (!gameCode) {
+    return res.status(400).json({ error: "Game code required" });
+  }
+
+  createSession(gameCode);
+  console.log(`Created game session ${gameCode}`);
+  
+  return res.json({ gameCode, created: true });
+});
+
+// Join a game session
+router.post("/game/:gameCode/join", (req, res) => {
+  const { gameCode } = req.params;
+  const { playerId } = req.body;
+
+  if (!playerId) {
+    return res.status(400).json({ error: "Player ID required" });
+  }
+
+  const session = getSession(gameCode);
+
+  if (!session) {
+    return res.status(404).json({ error: "Game not found" });
+  }
+
+  // Check if game is full
+  if (session.player1Id && session.player2Id) {
+    return res.status(400).json({ error: "Game is full" });
+  }
+
+  let assignedPlayerId: "player1" | "player2";
+
+  if (!session.player1Id) {
+    session.player1Id = playerId;
+    assignedPlayerId = "player1";
+    console.log(`${playerId} joined game ${gameCode} as player1`);
+  } else {
+    session.player2Id = playerId;
+    assignedPlayerId = "player2";
+    console.log(`${playerId} joined game ${gameCode} as player2`);
+  }
+
+  updateSession(gameCode, session);
+
+  return res.status(200).json({ playerId: assignedPlayerId });
+});
+
+// Get game status
+router.get("/game/:gameCode/status", (req, res) => {
+  const { gameCode } = req.params;
+  const session = getSession(gameCode);
+
+  if (!session) {
+    return res.status(404).json({ error: "Game not found" });
+  }
+
+  return res.json({
+    isFull: !!session.player1Id && !!session.player2Id,
+    mutuals: session.mutuals || [],
+    mutualsCount: session.mutuals?.length || 0,
+  });
+});
+
+// Upload profile data
+router.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  const { gameCode, playerId } = req.body;
+
+  if (!gameCode || !playerId) {
+    return res.status(400).json({ error: "Missing gameCode or playerId" });
+  }
+
+  let json: unknown;
+  try {
+    json = JSON.parse(req.file.buffer.toString());
+  } catch {
+    return res.status(400).json({ error: "Invalid JSON file" });
+  }
+
+  const profileLinks = extractProfileLinks(json);
+  let session = getSession(gameCode);
+
+  if (!session) {
+    session = createSession(gameCode);
+  }
+
+  // Store profiles by player ID
+  if (playerId === "player1") {
+    session.player1Profiles = profileLinks;
+  } else if (playerId === "player2") {
+    session.player2Profiles = profileLinks;
+  }
+
+  updateSession(gameCode, session);
+
+  // Calculate mutuals after storing profiles
+  calculateMutuals(gameCode);
+
+  // Get updated session with mutuals
+  const updatedSession = getSession(gameCode);
+
+  return res.status(200).json({
+    message: "File uploaded successfully",
+    profileCount: profileLinks.length,
+  });
+});
+
+export default router;
