@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { LeftColContainer, TwoColContainer } from "../components/SetupGamePage.styles";
 import { Label, LabelContentContainer } from "../components/Label.styles";
 import { GameCode, PlayerContainer, PlayerLabel, PlayersContainer, PlayerStatus } from "./WaitingRoom.styles";
-import { Button, IconButton, IconContainer } from "../components/Button.styles";
+import { IconButton, IconContainer } from "../components/Button.styles";
 import { UploadInstructions } from '../components/UploadInstructions';
 
 interface GameStatus {
@@ -150,7 +150,6 @@ export function WaitingRoom() {
                     Upload Friends
                 </IconButton>
                 <Players currentPlayerId={playerId} gameStatus={gameStatus} />
-                <Button>Start</Button>
             </LeftColContainer>
         </TwoColContainer>
     );
