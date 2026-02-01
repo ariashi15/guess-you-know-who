@@ -46,4 +46,5 @@ export const NameContainer = styled.div`
 `
 export const Username = styled.div`
     font-family: var(--font-body-bold);
+    font-weight: bold;
 `

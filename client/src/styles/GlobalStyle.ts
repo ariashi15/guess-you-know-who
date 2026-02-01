@@ -10,14 +10,14 @@ export const GlobalStyle = createGlobalStyle`
 
     @font-face {
         font-family: 'Roboto';
-        src: url('fonts/roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+        src: url('/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'Roboto-Bold';
-        src: url('fonts/roboto/Roboto-Medium.ttf') format('truetype');
+        src: url('/fonts/roboto/Roboto-Medium.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -27,9 +27,9 @@ export const GlobalStyle = createGlobalStyle`
         --red: #D0202D;
         --blue: #035094;
         --yellow: #ebd800;
-        --font-header: 'Melon Pop';
-        --font-body: 'Roboto';
-        --font-body-bold: 'Roboto-Bold';
+        --font-header: 'Melon Pop', sans-serif;
+        --font-body: 'Roboto', sans-serif;
+        --font-body-bold: 'Roboto-Bold', sans-serif;
     }
 
     *, *::before, *::after {
@@ -49,5 +49,4 @@ export const GlobalStyle = createGlobalStyle`
     button, h1, h2, h3, h4, h5, h6 {
         font-family: var(--font-header);
     }
-
 `;

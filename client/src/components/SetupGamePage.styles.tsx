@@ -11,7 +11,7 @@ export const LeftColContainer = styled.div`
     align-items: center;
     justify-content: center;
     margin-left: 37px;
-    gap: 70px;
+    gap: 50px;
 `
 
 export const InstructionBox = styled.div`
@@ -19,7 +19,10 @@ export const InstructionBox = styled.div`
     width: 370px;
     height: 585px;
     border-radius: 10px;
-    padding: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 40px;
 `
 
 export const InstructionsHeader = styled.h2`
