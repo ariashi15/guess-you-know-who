@@ -52,6 +52,12 @@ export function WaitingRoom() {
     useEffect(() => {
         if (!gameCode) return;
 
+        const playerSlotKey = `gykw_player_slot_${gameCode}`;
+        const storedSlot = localStorage.getItem(playerSlotKey);
+        if (storedSlot === "player1" || storedSlot === "player2") {
+            setPlayerId(storedSlot);
+        }
+
         const joinGame = async () => {
             try {
                 // Send the client's stable ID to the backend
@@ -70,6 +76,7 @@ export function WaitingRoom() {
                 // store the assigned player slot ("player1" or "player2")
                 // this is used to label "you" vs "opponent" in the UI
                 setPlayerId(data.assignedPlayerId);
+                localStorage.setItem(playerSlotKey, data.assignedPlayerId);
 
             } catch (error) {
                 console.error("Error joining game:", error);

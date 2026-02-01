@@ -4,6 +4,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import routes from "./routes";
 import { initCleanup } from "./storage";
+import "dotenv/config";
 
 // SERVER SETUP
 
