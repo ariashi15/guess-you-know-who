@@ -1,22 +1,16 @@
 import { InstructionBox, InstructionsHeader } from "./PageLayout.styles";
 
 export function UploadInstructions() {
-    const steps = [ 
-        `Go to Instagram Web > Settings > See more in Accounts Center > Your information and permissions > 
-        Export your information > Create export > Export to device.`,
-        'Inside Customize Information, deselect all information except for followers and following.',
-        'Inside Format, select JSON',
-        'Your information may take a few minutes to export. Download to your computer when ready.',
-        'Unzip the file on your computer. Upload following.json to Guess You-Know-Who.'
-    ];
-    
     return (
         <InstructionBox>
             <InstructionsHeader>How to Upload Your Friends</InstructionsHeader>
-            <ol style={{lineHeight: 1.6}}>
-                {steps.map((step, index) => (
-                    <li key={index} style={{color: 'var(--red)'}}>{step}</li>
-                ))}
+            <ol style={{lineHeight: 1.5, color: 'var(--red)'}}>
+                <li>Go to <i>Instagram Web &gt; Settings &gt; See more in Accounts Center &gt; Your information and permissions &gt; 
+        Export your information &gt; Create export &gt; Export to device.</i></li>
+                <li>Inside <b>Customize Information</b>, deselect all information except for followers and following.</li>
+                <li>Inside <b>Format</b>, select JSON</li>
+                <li>Your information may take a few minutes to export. Download to your computer when ready.</li>
+                <li>Unzip the file on your computer. Upload <b>following.json</b> to Guess You-Know-Who.</li>
             </ol>
         </InstructionBox>
     );

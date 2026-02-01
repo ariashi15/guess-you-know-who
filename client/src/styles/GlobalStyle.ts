@@ -49,4 +49,12 @@ export const GlobalStyle = createGlobalStyle`
     button, h1, h2, h3, h4, h5, h6 {
         font-family: var(--font-header);
     }
+
+    b {
+        font-family: var(--font-body-bold);
+    }
+
+    li {
+        margin-bottom: 7px;
+    }
 `;
