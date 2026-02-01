@@ -1,4 +1,4 @@
-import { InstructionBox, InstructionsHeader } from "./SetupGamePage.styles";
+import { InstructionBox, InstructionsHeader } from "./PageLayout.styles";
 
 export function UploadInstructions() {
     const steps = [ 
