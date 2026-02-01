@@ -13,7 +13,6 @@ A spin-off of the classic Guess Who, made personal with the people you know IRL.
 - Node.js
 - Express.js
 - TypeScript
-- Socket.io
 - Multer
 
 ### Data Storage
