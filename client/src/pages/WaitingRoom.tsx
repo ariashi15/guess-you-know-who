@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { LeftColContainer, TwoColContainer } from "../components/SetupGamePage.styles";
+import { LeftColContainer, TwoColContainer } from "../components/PageLayout.styles";
 import { Label, LabelContentContainer } from "../components/Label.styles";
 import { GameCode, PlayerContainer, PlayerLabel, PlayersContainer, PlayerStatus } from "./WaitingRoom.styles";
 import { IconButton, IconContainer } from "../components/Button.styles";
