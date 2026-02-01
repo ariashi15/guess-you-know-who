@@ -5,18 +5,30 @@ import { useParams } from "react-router-dom";
 interface Card {
     name: string;
     username: string;
-    pfp: string;
+    pfp_url: string;
     flipped: boolean;
 }
 
-function Card({ name, username, pfp, flipped: initialFlipped }: Card) {
+interface Profile {
+    username: string;
+    fullName: string;
+    profilePicUrl: string;
+}
+
+function Card({ name, username, pfp_url, flipped: initialFlipped }: Card) {
     const [flipped, setFlipped] = useState(initialFlipped);
 
     return (
         <div onClick={() => setFlipped(!flipped)}>
             {!flipped ? (
                 <CardContainer>
-                    <Photo src={pfp}></Photo>
+                    <Photo
+                        src={pfp_url}
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                            e.currentTarget.src = "/images/default-pfp.jpeg";
+                        }}
+                    ></Photo>
                     <NameContainer>
                     <Username>{username}</Username>
                     <div>{name}</div>
@@ -29,37 +41,23 @@ function Card({ name, username, pfp, flipped: initialFlipped }: Card) {
     );
 }
 
-// convert the pre-shuffled board from backend into Card objects
-// handles URL parsing to extract usernames
-function createBoard(board: string[]) {
-    return board.map((profileUrl) => {
-        let username = profileUrl;
-
-        // pull the username from the path if this is a URL
-        try {
-            const url = new URL(profileUrl);
-            const lastSegment = url.pathname.split("/").filter(Boolean).pop();
-            if (lastSegment) {
-                username = lastSegment;
-            }
-        } catch {
-            // if it's not a URL, keep the string as-is (minus a leading @)
-            username = profileUrl.replace(/^@/, "");
-        }
+function createBoardFromProfiles(profiles: Profile[]) {
+    return profiles.map((profile) => {
+        const proxyUrl = profile.profilePicUrl 
+            ? `${import.meta.env.VITE_API_URL}/proxy-image?url=${encodeURIComponent(profile.profilePicUrl)}`
+            : "/images/default-pfp.jpeg";
         
-        const handle = username.startsWith("@") ? username : `@${username}`;
-
         return {
-            name: username,
-            username: handle,
-            pfp: "/images/default-pfp.jpeg",
+            name: profile.fullName || profile.username,
+            username: `@${profile.username}`,
+            pfp_url: proxyUrl,
             flipped: false,
         };
     });
 }
 
 export function GamePage() {
-    const [board, setBoard] = useState<string[]>([]);
+    const [board, setBoard] = useState<Profile[]>([]);
     const { gameCode } = useParams<{ gameCode: string }>();
 
     useEffect(() => {
@@ -81,9 +79,18 @@ export function GamePage() {
 
         getBoard();
 
-    }, [gameCode]);
+        let interval: ReturnType<typeof setInterval> | undefined;
+        if (board.length === 0) {
+            interval = setInterval(getBoard, 1000);
+        }
 
-    const cards = createBoard(board);
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+
+    }, [gameCode, board.length]);
+
+    const cards = createBoardFromProfiles(board);
 
     return (
         <CardsContainer>

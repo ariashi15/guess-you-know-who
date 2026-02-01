@@ -32,7 +32,7 @@ function shuffleArray(array: string[]): string[] {
   return shuffled;
 }
 
-// Generate a shuffled board of up to 24 cards
+// generate a shuffled board of up to 24 cards
 export function generateBoard(mutuals: string[]): string[] {
   const shuffled = shuffleArray(mutuals);
   return shuffled.slice(0, Math.min(24, shuffled.length));
@@ -55,16 +55,10 @@ export function calculateMutuals(gameCode: string): void {
     // store the mutuals
     session.mutuals = mutuals;
     console.log(`Calculated ${session.mutuals.length} mutuals for game ${gameCode}`);
-
-    if (!session.board || session.board.length === 0) {
-      // store the generated board
-      session.board = generateBoard(session.mutuals);
-      console.log(`Generated board with ${session.board.length} cards for game ${gameCode}`);
-    }
   }
 }
 
-// Clean up expired game sessions
+// clean up expired game sessions
 export function initCleanup(): void {
   setInterval(() => {
     const ONE_HOUR = 60 * 60 * 1000;

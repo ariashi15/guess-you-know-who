@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { extractProfileLinks } from "./parser";
+import { fetchProfilesFromUrls } from "./apify";
 import { getSession, createSession, updateSession, calculateMutuals, generateBoard } from "./storage";
 
 const router = express.Router();
@@ -95,7 +96,34 @@ router.get("/game/:gameCode/status", (req, res) => {
     });
 });
 
-// generate 24 cards for the board, return as array of urls for frontend to parse
+// proxy Instagram images to bypass CORS
+router.get("/proxy-image", async (req, res) => {
+    const { url } = req.query;
+
+    if (!url || typeof url !== "string") {
+        return res.status(400).json({ error: "Image URL required" });
+    }
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            return res.status(response.status).json({ error: "Failed to fetch image" });
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (contentType) {
+            res.setHeader("Content-Type", contentType);
+        }
+        res.setHeader("Cache-Control", "public, max-age=86400");
+        
+        const buffer = await response.arrayBuffer();
+        res.send(Buffer.from(buffer));
+    } catch (error) {
+        res.status(500).json({ error: "Failed to proxy image" });
+    }
+});
+
+// return stored board profiles
 router.get("/game/:gameCode/board", (req, res) => {
     const { gameCode } = req.params;
     const session = getSession(gameCode);
@@ -105,33 +133,34 @@ router.get("/game/:gameCode/board", (req, res) => {
     }
 
     return res.json({
-      board: session.board,
+      board: session.board || [],
     })
-  })
+});
 
-  // reshuffle the board on demand (for refresh button)
-  router.get("/game/:gameCode/refresh_board", (req, res) => {
+// reshuffle the board on demand (for refresh button)
+router.get("/game/:gameCode/refresh_board", async (req, res) => {
     const { gameCode } = req.params;
     const session = getSession(gameCode);
 
     if (!session) {
-      return res.status(404).json({ error: "Game not found" });
+        return res.status(404).json({ error: "Game not found" });
     }
 
     if (!session.mutuals || session.mutuals.length === 0) {
-      return res.status(400).json({ error: "No mutuals to generate board from" });
+        return res.status(400).json({ error: "No mutuals to generate board from" });
     }
 
-    session.board = generateBoard(session.mutuals);
+    const boardUrls = generateBoard(session.mutuals);
+    session.board = await fetchProfilesFromUrls(boardUrls);
     updateSession(gameCode, session);
 
     return res.json({
-      board: session.board,
+        board: session.board,
     })
-  })
+})
 
 // upload profile data
-router.post("/upload", upload.single("file"), (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
@@ -165,13 +194,21 @@ router.post("/upload", upload.single("file"), (req, res) => {
 
   updateSession(gameCode, session);
 
-  // calculate mutuals after storing profiles -> this stores both the mutuals and the initial board
+  // calculate mutuals after storing profiles
   calculateMutuals(gameCode);
 
-  return res.status(200).json({
-    message: "File uploaded successfully",
-    profileCount: profileLinks.length,
-  });
+  // get updated session with mutuals
+  const updatedSession = getSession(gameCode);
+
+  // creates a board if mutuals exist and the board hasn't bee created yet
+  if (updatedSession?.mutuals && (!updatedSession.board || updatedSession.board.length === 0)) {
+    // gets the 24 board urls
+    const boardUrls = generateBoard(updatedSession.mutuals);
+    // fetches profile info from the urls
+    updatedSession.board = await fetchProfilesFromUrls(boardUrls);
+    // updates session w/ profile info
+    updateSession(gameCode, updatedSession);
+  }
 });
 
 export default router;
