@@ -66,7 +66,7 @@ export function GamePage() {
         if (!gameCode) return;
 
         const getBoard = async () => {
-            const res = await fetch(`http://localhost:3001/game/${gameCode}/board`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameCode}/board`);
 
             if (!res.ok) {
                 console.error("Error fetching board");

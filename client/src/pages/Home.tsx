@@ -29,7 +29,7 @@ async function generateGameCode() {
 
 // checks if game already exists
 async function checkGameExistence(gameCode: string) {
-    const res = await fetch(`http://localhost:3001/game/${gameCode}/exists`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameCode}/exists`, {
         method: 'GET',
     });
 
@@ -51,7 +51,7 @@ export function Home() {
     const handleCreateGame = async () => {
         const gameCode = await generateGameCode();
 
-        const res = await fetch("http://localhost:3001/game/create", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/game/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({ gameCode })

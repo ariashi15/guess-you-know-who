@@ -56,7 +56,7 @@ export function WaitingRoom() {
             try {
                 // Send the client's stable ID to the backend
                 // The backend will recognize if this client already joined and return the same slot
-                const res = await fetch(`http://localhost:3001/game/${gameCode}/join`, {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameCode}/join`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ playerId: getClientId() }),
@@ -150,7 +150,7 @@ export function WaitingRoom() {
 
 // checks if game is full and files are uploaded
 async function checkGameStatus(gameCode: string): Promise<GameStatus> {
-  const res = await fetch(`http://localhost:3001/game/${gameCode}/status`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/game/${gameCode}/status`);
   
   if (!res.ok) {
     throw new Error("Failed to check game status");
@@ -166,7 +166,7 @@ async function uploadFile(file: File, gameCode: string, playerId: string) {
     formData.append("gameCode", gameCode);
     formData.append("playerId", playerId);
 
-    const res = await fetch("http://localhost:3001/upload", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
         method: "POST",
         body: formData,
     });
