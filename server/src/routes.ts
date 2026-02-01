@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { extractProfileLinks } from "./parser";
-import { getSession, createSession, updateSession, calculateMutuals } from "./storage";
+import { getSession, createSession, updateSession, calculateMutuals, generateBoard } from "./storage";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -32,7 +32,7 @@ router.post("/game/create", (req, res) => {
   return res.json({ gameCode, created: true });
 });
 
-// Join a game session
+// join a game session
 router.post("/game/:gameCode/join", (req, res) => {
   const { gameCode } = req.params;
   const { playerId } = req.body;
@@ -47,7 +47,7 @@ router.post("/game/:gameCode/join", (req, res) => {
     return res.status(404).json({ error: "Game not found" });
   }
 
-  // Rejoin: return existing slot if this client already joined
+  // rejoin: return existing slot if this client already joined
   if (session.player1Id === playerId) {
     return res.status(200).json({ assignedPlayerId: "player1" });
   }
@@ -56,7 +56,7 @@ router.post("/game/:gameCode/join", (req, res) => {
     return res.status(200).json({ assignedPlayerId: "player2" });
   }
 
-  // Check if game is full
+  // check if game is full
   if (session.player1Id && session.player2Id) {
     return res.status(400).json({ error: "Game is full" });
   }
@@ -80,25 +80,57 @@ router.post("/game/:gameCode/join", (req, res) => {
 
 // get game status
 router.get("/game/:gameCode/status", (req, res) => {
-  const { gameCode } = req.params;
-  const session = getSession(gameCode);
+    const { gameCode } = req.params;
+    const session = getSession(gameCode);
 
-  if (!session) {
-    return res.status(404).json({ error: "Game not found" });
-  }
+    if (!session) {
+        return res.status(404).json({ error: "Game not found" });
+    }
 
-  return res.json({
-    isFull: !!session.player1Id && !!session.player2Id,
-    player1Connected: !!session.player1Id,
-    player2Connected: !!session.player2Id,
-    player1Uploaded: !!session.player1Profiles,
-    player2Uploaded: !!session.player2Profiles,
-    mutuals: session.mutuals || [],
-    mutualsCount: session.mutuals?.length || 0,
-  });
+    return res.json({
+        player1Connected: !!session.player1Id,
+        player2Connected: !!session.player2Id,
+        player1Uploaded: !!session.player1Profiles,
+        player2Uploaded: !!session.player2Profiles,
+    });
 });
 
-// Upload profile data
+// generate 24 cards for the board, return as array of urls for frontend to parse
+router.get("/game/:gameCode/board", (req, res) => {
+    const { gameCode } = req.params;
+    const session = getSession(gameCode);
+
+    if (!session) {
+        return res.status(404).json({ error: "Game not found" });
+    }
+
+    return res.json({
+      board: session.board,
+    })
+  })
+
+  // reshuffle the board on demand (for refresh button)
+  router.get("/game/:gameCode/refresh_board", (req, res) => {
+    const { gameCode } = req.params;
+    const session = getSession(gameCode);
+
+    if (!session) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+
+    if (!session.mutuals || session.mutuals.length === 0) {
+      return res.status(400).json({ error: "No mutuals to generate board from" });
+    }
+
+    session.board = generateBoard(session.mutuals);
+    updateSession(gameCode, session);
+
+    return res.json({
+      board: session.board,
+    })
+  })
+
+// upload profile data
 router.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
@@ -124,7 +156,7 @@ router.post("/upload", upload.single("file"), (req, res) => {
     session = createSession(gameCode);
   }
 
-  // Store profiles by player ID
+  // store profiles by player ID
   if (playerId === "player1") {
     session.player1Profiles = profileLinks;
   } else if (playerId === "player2") {
@@ -133,11 +165,8 @@ router.post("/upload", upload.single("file"), (req, res) => {
 
   updateSession(gameCode, session);
 
-  // Calculate mutuals after storing profiles
+  // calculate mutuals after storing profiles -> this stores both the mutuals and the initial board
   calculateMutuals(gameCode);
-
-  // Get updated session with mutuals
-  const updatedSession = getSession(gameCode);
 
   return res.status(200).json({
     message: "File uploaded successfully",

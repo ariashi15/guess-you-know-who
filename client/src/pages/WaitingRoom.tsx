@@ -7,13 +7,10 @@ import { IconButton, IconContainer } from "../components/Button.styles";
 import { UploadInstructions } from '../components/UploadInstructions';
 
 interface GameStatus {
-  isFull: boolean;
   player1Connected: boolean;
   player2Connected: boolean;
   player1Uploaded: boolean;
   player2Uploaded: boolean;
-  mutuals: string[];
-  mutualsCount: number;
 }
 
 // localStorage key for storing the unique client identifier
@@ -45,13 +42,10 @@ export function WaitingRoom() {
     // State to track game status
     const [playerId, setPlayerId] = useState('');
     const [gameStatus, setGameStatus] = useState<GameStatus>({
-        isFull: false,
         player1Connected: false,
         player2Connected: false,
         player1Uploaded: false,
         player2Uploaded: false,
-        mutuals: [],
-        mutualsCount: 0,
     });
 
     // join the game and get assigned to player1 or player2
@@ -96,7 +90,7 @@ export function WaitingRoom() {
                 setGameStatus(status);
                 
                 // navigate to game page if both players have joined and uploaded
-                if (status.isFull && status.mutualsCount > 0) {
+                if (status.player1Connected && status.player2Connected && status.player1Uploaded && status.player2Uploaded) {
                     navigate(`/play/${gameCode}`);
                 }
             } catch (error) {

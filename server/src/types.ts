@@ -4,5 +4,6 @@ export interface GameSession {
   player1Profiles?: string[];
   player2Profiles?: string[];
   mutuals?: string[];
+  board?: string[];
   createdAt: number;
 }

@@ -20,7 +20,25 @@ export function deleteSession(gameCode: string): void {
   gameSessions.delete(gameCode);
 }
 
-// Calculate mutuals if both players have uploaded
+// Fisher-Yates shuffle
+function shuffleArray(array: string[]): string[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = shuffled[i]!;
+    shuffled[i] = shuffled[j]!;
+    shuffled[j] = temp;
+  }
+  return shuffled;
+}
+
+// Generate a shuffled board of up to 24 cards
+export function generateBoard(mutuals: string[]): string[] {
+  const shuffled = shuffleArray(mutuals);
+  return shuffled.slice(0, Math.min(24, shuffled.length));
+}
+
+// calculate mutuals if both players have uploaded
 export function calculateMutuals(gameCode: string): void {
   const session = gameSessions.get(gameCode);
 
@@ -34,9 +52,15 @@ export function calculateMutuals(gameCode: string): void {
   if (data1 && data2 && !session.mutuals) {
     const set1 = new Set(data1);
     const mutuals =  data2.filter((user: string) => set1.has(user));
+    // store the mutuals
     session.mutuals = mutuals;
     console.log(`Calculated ${session.mutuals.length} mutuals for game ${gameCode}`);
-    return;
+
+    if (!session.board || session.board.length === 0) {
+      // store the generated board
+      session.board = generateBoard(session.mutuals);
+      console.log(`Generated board with ${session.board.length} cards for game ${gameCode}`);
+    }
   }
 }
 
