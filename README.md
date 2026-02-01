@@ -14,6 +14,7 @@ A spin-off of the classic Guess Who, made personal with the people you know IRL.
 - Express.js
 - TypeScript
 - Multer
+- Apify
 
 ### Data Storage
 - In-memory Map - Temporary game session storage (auto-cleanup after 1 hour)
